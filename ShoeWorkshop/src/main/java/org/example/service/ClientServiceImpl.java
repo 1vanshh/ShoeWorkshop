@@ -2,34 +2,52 @@ package org.example.service;
 
 import org.example.entities.Client;
 import org.example.repository.ClientRepository;
+import org.example.repository.ClientRepositoryImpl;
 
 import java.util.List;
 
 public class ClientServiceImpl implements ClientService {
+    private final ClientRepositoryImpl clientRepository;
 
-    private final ClientRepository repository;
-
-    public ClientServiceImpl(ClientRepository repository) {
-        this.repository = repository;
+    @Override
+    public void update(int id, Client newClient) {
+        Client existing = clientRepository.findByEmail(newClient.getEmail());
+        if (existing != null && existing.getClientId() != id) {
+            throw new IllegalArgumentException("Email уже используется другим клиентом!");
+        }
+        clientRepository.update(id, newClient);
     }
 
     @Override
-    public List<Client> getAllClients() {
-        return List.of();
+    public void add(Client client) {
+        if (clientRepository.findByEmail(client.getEmail()) != null) {
+            throw new IllegalArgumentException("Клиент с таким email уже существует!");
+        }
+        clientRepository.add(client);
+    }
+
+    public ClientServiceImpl(ClientRepositoryImpl clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     @Override
-    public Client getClientById(int id) {
-        return null;
+    public List<Client> getAll() {
+        return clientRepository.getAll();
     }
 
     @Override
-    public void creatClient(Client client) {
-
+    public Client getById(int id) {
+        return clientRepository.getById(id);
     }
 
     @Override
-    public void deleteClient(Client client) {
+    public void delete(int id) {
+        //TODO: Добавить проверку на текущие заказы (Если они есть, нужно предупредить)
+        clientRepository.getAll().removeIf(c -> c.getClientId() == id);
+    }
 
+    @Override
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email);
     }
 }
