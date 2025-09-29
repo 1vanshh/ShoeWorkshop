@@ -18,6 +18,13 @@ public class Receipt {
         this.statusId = statusId;
     }
 
+    public Receipt(int receiptId, int clientId) {
+        this.receiptId = receiptId;
+        this.clientId = clientId;
+        this.orderDate = LocalDate.now();
+        this.statusId = statusId;
+    }
+
     public int getReceiptId() {
         return receiptId;
     }
