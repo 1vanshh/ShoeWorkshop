@@ -12,7 +12,8 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public Client findByEmail(String email) {
         if (!isValidEmail(email)) {
-            throw new IllegalArgumentException("❌ Некорректный email: " + email);
+//            throw new IllegalArgumentException("❌ Некорректный email: " + email);
+            System.out.println("❌ Некорректный email: " + email);
         }
         for (Client client : clients.values()) {
             if (client.getEmail().equals(email))
@@ -47,7 +48,8 @@ public class ClientRepositoryImpl implements ClientRepository {
             newObject.setClientId(id); // сохраняем id
             clients.put(id, newObject);
         } else {
-            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+//            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+            System.out.println("Client with id " + id + " does not exist");
         }
     }
 

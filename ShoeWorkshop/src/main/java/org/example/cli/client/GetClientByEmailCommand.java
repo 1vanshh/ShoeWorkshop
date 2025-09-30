@@ -21,8 +21,11 @@ public class GetClientByEmailCommand implements Command {
         String clientEmail = scanner.nextLine();
 
         Client client = clientService.findByEmail(clientEmail);
-
-        System.out.println("Client with its Email: " + client.toString());
+        if (client == null) {
+            System.out.println("No client with that email " + clientEmail);
+        } else {
+            System.out.println("Client with its Email: " + client);
+        }
     }
 
     @Override
