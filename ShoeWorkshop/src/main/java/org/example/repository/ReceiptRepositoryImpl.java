@@ -28,7 +28,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     @Override
     public void add(Receipt object) {
         if (object.getReceiptId() == 0) {
-            object.setReceiptId(idCounter++);
+            object.setReceiptId(idCounter);
             idCounter++;
         }
         receipts.put(object.getReceiptId(), object);

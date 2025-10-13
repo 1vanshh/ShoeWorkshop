@@ -49,6 +49,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email);
+        Client client = clientRepository.findByEmail(email);
+        if (client == null) System.out.println("<UNK> <UNK> <UNK> email <UNK> <UNK> <UNK>");
+        return client;
     }
 }

@@ -30,6 +30,6 @@ public class GetClientByEmailCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "Shows a client by its Email";
+        return "Find a client by its Email";
     }
 }

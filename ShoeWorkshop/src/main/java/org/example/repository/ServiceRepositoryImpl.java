@@ -14,7 +14,7 @@ public class ServiceRepositoryImpl implements ServiceRepository {
     @Override
     public void add(Service service) {
         if (service.getServiceId() == 0) {
-            service.setServiceId(idCounter++);
+            service.setServiceId(idCounter);
             idCounter++;
         }
         services.put(service.getServiceId(), service);

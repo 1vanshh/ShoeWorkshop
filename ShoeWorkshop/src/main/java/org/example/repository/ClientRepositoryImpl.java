@@ -11,10 +11,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     //TODO: Можно сделать через лямбда-выражение
     @Override
     public Client findByEmail(String email) {
-        if (!isValidEmail(email)) {
-//            throw new IllegalArgumentException("❌ Некорректный email: " + email);
-            System.out.println("❌ Invalid email: " + email);
-        }
         for (Client client : clients.values()) {
             if (client.getEmail().equals(email))
                 return client;
@@ -22,15 +18,10 @@ public class ClientRepositoryImpl implements ClientRepository {
         return null;
     }
 
-    private boolean isValidEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
-    }
-
-
     @Override
     public void add(Client client) {
         if (client.getClientId() == 0) {
-            client.setClientId(idCounter++);
+            client.setClientId(idCounter);
             idCounter++;
         }
         clients.put(client.getClientId(), client);

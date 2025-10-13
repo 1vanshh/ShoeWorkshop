@@ -14,7 +14,7 @@ public class OrderStatusRepositoryImpl implements OrderStatusRepository {
     @Override
     public void add(OrderStatus object) {
         if (object.getStatusId() == 0) {
-            object.setStatusId(idCounter++);
+            object.setStatusId(idCounter);
             idCounter++;
         }
         orderStatuses.put(object.getStatusId(), object);
