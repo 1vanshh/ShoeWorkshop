@@ -1,9 +1,6 @@
 package org.example.cli;
 
-import org.example.cli.client.AddClientCommand;
-import org.example.cli.client.GetAllClientsCommand;
-import org.example.cli.client.GetClientByEmailCommand;
-import org.example.cli.client.GetClientByIdCommand;
+import org.example.cli.client.*;
 import org.example.cli.receipt.AddReceiptCommand;
 import org.example.cli.receipt.GetAllReceiptsCommand;
 import org.example.cli.service.AddServiceCommand;
@@ -34,6 +31,8 @@ public class Menu {
                 new GetAllClientsCommand(clientService),
                 new GetClientByIdCommand(clientService),
                 new GetClientByEmailCommand(clientService),
+                new DeleteClientCommand(clientService),
+                new UpdateClientCommand(clientService),
 
                 new AddReceiptCommand(receiptService),
                 new GetAllReceiptsCommand(receiptService),
