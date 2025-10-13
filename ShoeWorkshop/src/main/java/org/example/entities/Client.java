@@ -21,8 +21,8 @@ public class Client {
         private String fullName;
         private String address;
 
-        private String phoneNumber = "-1";
-        private String email = "-1";
+        private String phoneNumber = null;
+        private String email = null;
 
         public Builder(int clientId, String fullName, String address) {
             this.clientId = clientId;
