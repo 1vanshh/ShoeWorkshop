@@ -10,11 +10,11 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ReceiptItem {
-    private int itemId;
-    private int receiptId;
-    private int serviceId;
-    private int price;
-    private int quantity;
+    private int itemId; // Обязательно
+    private int receiptId; // Обязательно
+    private int serviceId; // Обязательно
+    private int price; // Обязательно
+    private int quantity; // Обязательно
     
     public ReceiptItem(int itemId, int receiptId, int serviceId, int price, int quantity) {
         this.itemId = itemId;

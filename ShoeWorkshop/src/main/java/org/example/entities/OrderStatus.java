@@ -10,8 +10,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class OrderStatus {
-    private int statusId;
-    private String statusName;
+    private int statusId; // Обязательно
+    private String statusName; // Обязательно
 
     public OrderStatus(int statusId, String statusName) {
         this.statusId = statusId;

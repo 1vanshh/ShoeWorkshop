@@ -16,9 +16,9 @@ public class DeleteClientCommand implements Command {
     @Override
     public void execute() {
         System.out.println("Please enter the client id you wish to delete:");
-        String clientId = scanner.nextLine();
+        int clientId = Integer.parseInt(scanner.nextLine());
 
-        clientService.delete(Integer.parseInt(clientId));
+        clientService.delete(clientId);
     }
 
     @Override

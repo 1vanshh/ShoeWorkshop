@@ -13,7 +13,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     public Client findByEmail(String email) {
         if (!isValidEmail(email)) {
 //            throw new IllegalArgumentException("❌ Некорректный email: " + email);
-            System.out.println("❌ Некорректный email: " + email);
+            System.out.println("❌ Invalid email: " + email);
         }
         for (Client client : clients.values()) {
             if (client.getEmail().equals(email))
@@ -43,14 +43,13 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
+    public void delete(int id) {
+        clients.remove(id);
+    }
+
+    @Override
     public void update(int id, Client newObject) {
-        if (clients.containsKey(id)) {
-            newObject.setClientId(id); // сохраняем id
-            clients.put(id, newObject);
-        } else {
-//            throw new IllegalArgumentException("Client with id " + id + " does not exist");
-            System.out.println("Client with id " + id + " does not exist");
-        }
+        clients.put(id, newObject);
     }
 
     @Override

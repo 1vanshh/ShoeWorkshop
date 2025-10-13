@@ -27,6 +27,11 @@ public class OrderStatusRepositoryImpl implements OrderStatusRepository {
     }
 
     @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
     public void update(int id, OrderStatus newObject) {
         if (orderStatuses.containsKey(id)) {
             newObject.setStatusId(id);

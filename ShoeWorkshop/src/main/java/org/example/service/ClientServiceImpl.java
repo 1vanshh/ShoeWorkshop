@@ -11,10 +11,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void update(int id, Client newClient) {
-        Client existing = clientRepository.findByEmail(newClient.getEmail());
-        if (existing != null && existing.getClientId() != id) {
-//            throw new IllegalArgumentException("Email уже используется другим клиентом!");
-            System.out.println("Email уже используется другим клиентом!");
+        Client existing = clientRepository.getById(id);
+        if (existing == null) {
+            System.out.println("Client with id" + id + " does not exist");
         }
         clientRepository.update(id, newClient);
     }
@@ -45,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void delete(int id) {
         //TODO: Добавить проверку на текущие заказы (Если они есть, нужно предупредить)
-        clientRepository.getAll().removeIf(c -> c.getClientId() == id);
+        clientRepository.delete(id);
     }
 
     @Override

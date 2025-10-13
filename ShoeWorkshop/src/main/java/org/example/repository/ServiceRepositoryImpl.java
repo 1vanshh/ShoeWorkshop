@@ -27,6 +27,11 @@ public class ServiceRepositoryImpl implements ServiceRepository {
     }
 
     @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
     public void update(int id, Service newObject) {
         if (services.containsKey(id)) {
             newObject.setServiceId(id);

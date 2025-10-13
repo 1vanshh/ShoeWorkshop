@@ -12,10 +12,10 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 public class Receipt {
-    private int receiptId;
-    private int clientId;
-    private LocalDate orderDate;
-    private int statusId;
+    private int receiptId; // Обязательно
+    private int clientId; // Обязательно
+    private LocalDate orderDate; // Обязательно
+    private int statusId; // Обязательно
 
     public Receipt(int receiptId, int clientId, LocalDate orderDate, int statusId) {
         this.receiptId = receiptId;

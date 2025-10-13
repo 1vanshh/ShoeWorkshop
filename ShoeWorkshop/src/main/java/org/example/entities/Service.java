@@ -10,9 +10,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Service {
-    private int serviceId;
-    private String serviceName;
-    private String basePrice;
+    private int serviceId; // Обязательно
+    private String serviceName; // Обязательно
+    private String basePrice; // Обязательно
 
     public Service(int serviceId, String serviceName, String basePrice) {
         this.serviceId = serviceId;

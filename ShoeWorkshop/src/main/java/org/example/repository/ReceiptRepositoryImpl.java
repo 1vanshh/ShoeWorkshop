@@ -41,6 +41,11 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     }
 
     @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
     public void update(int id, Receipt newObject) {
         if (receipts.containsKey(id)) {
             newObject.setReceiptId(id);
