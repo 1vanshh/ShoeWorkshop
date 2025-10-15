@@ -3,12 +3,12 @@ package org.example.cli;
 import org.example.cli.client.*;
 import org.example.cli.receipt.AddReceiptCommand;
 import org.example.cli.receipt.GetAllReceiptsCommand;
-import org.example.cli.service.AddServiceCommand;
-import org.example.cli.service.GetAllServicesCommand;
+import org.example.cli.service.AddFavourCommand;
+import org.example.cli.service.GetAllFavoursCommand;
 import org.example.repository.*;
 import org.example.service.ClientServiceImpl;
 import org.example.service.ReceiptServiceImpl;
-import org.example.service.ServiceServiceImpl;
+import org.example.service.FavourServiceImpl;
 
 import java.util.Scanner;
 
@@ -23,8 +23,8 @@ public class Menu {
         ReceiptRepositoryImpl receiptRepository = new ReceiptRepositoryImpl();
         ReceiptServiceImpl receiptService = new ReceiptServiceImpl(receiptRepository);
 
-        ServiceRepositoryImpl serviceRepository = new ServiceRepositoryImpl();
-        ServiceServiceImpl serviceService = new ServiceServiceImpl(serviceRepository);
+        FavourRepositoryImpl serviceRepository = new FavourRepositoryImpl();
+        FavourServiceImpl serviceService = new FavourServiceImpl(serviceRepository);
 
         this.commands = new Command[] {
                 new AddClientCommand(clientService),
@@ -37,8 +37,8 @@ public class Menu {
                 new AddReceiptCommand(receiptService),
                 new GetAllReceiptsCommand(receiptService),
 
-                new AddServiceCommand(serviceService),
-                new GetAllServicesCommand(serviceService),
+                new AddFavourCommand(serviceService),
+                new GetAllFavoursCommand(serviceService),
         };
     }
 

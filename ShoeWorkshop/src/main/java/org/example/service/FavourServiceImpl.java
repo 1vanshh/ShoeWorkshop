@@ -1,28 +1,28 @@
 package org.example.service;
 
-import org.example.entities.Service;
-import org.example.repository.ServiceRepositoryImpl;
+import org.example.entities.Favour;
+import org.example.repository.FavourRepositoryImpl;
 
 import java.util.List;
 
-public class ServiceServiceImpl implements ServiceService {
-    private final ServiceRepositoryImpl serviceRepository;
+public class FavourServiceImpl implements FavourService {
+    private final FavourRepositoryImpl serviceRepository;
 
-    public ServiceServiceImpl(ServiceRepositoryImpl serviceRepository) {
+    public FavourServiceImpl(FavourRepositoryImpl serviceRepository) {
         this.serviceRepository = serviceRepository;
     }
 
 
     @Override
-    public void add(Service object) {
-        if (serviceRepository.getById(object.getServiceId()) != null) {
+    public void add(Favour object) {
+        if (serviceRepository.getById(object.getFavourId()) != null) {
             throw new IllegalArgumentException("Service already exists");
         }
         serviceRepository.add(object);
     }
 
     @Override
-    public void update(int id, Service newObject) {
+    public void update(int id, Favour newObject) {
         if (serviceRepository.getById(id) == null) {
             throw new IllegalArgumentException("Service does not exist");
         }
@@ -35,12 +35,12 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Service getById(int id) {
+    public Favour getById(int id) {
         return null;
     }
 
     @Override
-    public List<Service> getAll() {
+    public List<Favour> getAll() {
         return List.of();
     }
 }
