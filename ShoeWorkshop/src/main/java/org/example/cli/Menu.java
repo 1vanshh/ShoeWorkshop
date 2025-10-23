@@ -13,10 +13,10 @@ import org.example.service.FavourServiceImpl;
 import java.util.Scanner;
 
 public class Menu {
-    private final Scanner scanner = new Scanner(System.in);
-    private final Command[] commands;
+    private static Scanner scanner = new Scanner(System.in);
+    private static Command[] commands;
 
-    public Menu() {
+    static {
         ClientRepositoryImpl clientRepository = new ClientRepositoryImpl();
         ClientServiceImpl clientService = new ClientServiceImpl(clientRepository);
 
@@ -26,7 +26,7 @@ public class Menu {
         FavourRepositoryImpl serviceRepository = new FavourRepositoryImpl();
         FavourServiceImpl serviceService = new FavourServiceImpl(serviceRepository);
 
-        this.commands = new Command[] {
+        commands = new Command[] {
                 new AddClientCommand(clientService),
                 new GetAllClientsCommand(clientService),
                 new GetClientByIdCommand(clientService),
@@ -43,7 +43,7 @@ public class Menu {
     }
 
 
-    public void run() {
+    public static void run() {
         while (true) {
             System.out.println("\nMenu:");
             for (int i = 0; i < commands.length; i++) {
