@@ -14,7 +14,7 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public void add(OrderStatus object) {
-        if (orderStatusRepository.getById(object.getStatusId()) != null) {
+        if (orderStatusRepository.findById(object.getStatusId()) != null) {
             throw new IllegalArgumentException("Order status already exists");
         }
         orderStatusRepository.add(object);
@@ -22,7 +22,7 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public void update(int id, OrderStatus newObject) {
-        OrderStatus existing = orderStatusRepository.getById(id);
+        OrderStatus existing = orderStatusRepository.findById(id);
         if (existing != null) {
             throw new IllegalArgumentException("Order status with id " + id + " already exists");
         }
@@ -31,16 +31,16 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public void delete(int id) {
-        orderStatusRepository.getAll().removeIf(orderStatus -> orderStatus.getStatusId() == id);
+        orderStatusRepository.findAll().removeIf(orderStatus -> orderStatus.getStatusId() == id);
     }
 
     @Override
     public OrderStatus getById(int id) {
-        return orderStatusRepository.getById(id);
+        return orderStatusRepository.findById(id);
     }
 
     @Override
     public List<OrderStatus> getAll() {
-        return orderStatusRepository.getAll();
+        return orderStatusRepository.findAll();
     }
 }

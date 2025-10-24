@@ -28,12 +28,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void removeAll() {
-        clients.clear();
-        idCounter = 1;
-    }
-
-    @Override
     public void delete(int id) {
         clients.remove(id);
     }
@@ -44,12 +38,12 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client getById(int id) {
+    public Client findById(int id) {
         return clients.get(id);
     }
 
     @Override
-    public List<Client> getAll() {
+    public List<Client> findAll() {
         return new ArrayList<>(clients.values());
     }
 }

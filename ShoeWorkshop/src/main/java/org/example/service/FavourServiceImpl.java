@@ -15,7 +15,7 @@ public class FavourServiceImpl implements FavourService {
 
     @Override
     public void add(Favour object) {
-        if (serviceRepository.getById(object.getFavourId()) != null) {
+        if (serviceRepository.findById(object.getFavourId()) != null) {
             throw new IllegalArgumentException("Service already exists");
         }
         serviceRepository.add(object);
@@ -23,7 +23,7 @@ public class FavourServiceImpl implements FavourService {
 
     @Override
     public void update(int id, Favour newObject) {
-        if (serviceRepository.getById(id) == null) {
+        if (serviceRepository.findById(id) == null) {
             throw new IllegalArgumentException("Service does not exist");
         }
         serviceRepository.update(id, newObject);

@@ -21,12 +21,6 @@ public class FavourRepositoryImpl implements FavourRepository {
     }
 
     @Override
-    public void removeAll() {
-        favours.clear();
-        idCounter = 1;
-    }
-
-    @Override
     public void delete(int id) {
 
     }
@@ -42,12 +36,12 @@ public class FavourRepositoryImpl implements FavourRepository {
     }
 
     @Override
-    public Favour getById(int id) {
+    public Favour findById(int id) {
         return favours.get(id);
     }
 
     @Override
-    public List<Favour> getAll() {
+    public List<Favour> findAll() {
         return new ArrayList<>(favours.values());
     }
 }

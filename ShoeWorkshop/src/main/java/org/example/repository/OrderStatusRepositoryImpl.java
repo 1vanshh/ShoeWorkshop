@@ -21,12 +21,6 @@ public class OrderStatusRepositoryImpl implements OrderStatusRepository {
     }
 
     @Override
-    public void removeAll() {
-        orderStatuses.clear();
-        idCounter = 1;
-    }
-
-    @Override
     public void delete(int id) {
 
     }
@@ -42,12 +36,12 @@ public class OrderStatusRepositoryImpl implements OrderStatusRepository {
     }
 
     @Override
-    public OrderStatus getById(int id) {
+    public OrderStatus findById(int id) {
         return orderStatuses.get(id);
     }
 
     @Override
-    public List<OrderStatus> getAll() {
+    public List<OrderStatus> findAll() {
         return new ArrayList<>(orderStatuses.values());
     }
 }

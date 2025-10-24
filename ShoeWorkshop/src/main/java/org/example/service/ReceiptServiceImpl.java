@@ -20,7 +20,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public void add(Receipt object) {
-        if (receiptRepository.getById(object.getReceiptId()) != null) {
+        if (receiptRepository.findById(object.getReceiptId()) != null) {
             throw new IllegalArgumentException("Receipt already exists");
         }
         receiptRepository.add(object);
@@ -28,7 +28,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public void update(int id, Receipt newObject) {
-        Receipt receipt = receiptRepository.getById(id);
+        Receipt receipt = receiptRepository.findById(id);
         if (receipt != null) {
             throw new IllegalArgumentException("receipt already exists");
         }
@@ -37,16 +37,16 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public void delete(int id) {
-        receiptRepository.getAll().remove(id);
+        receiptRepository.findAll().remove(id);
     }
 
     @Override
     public Receipt getById(int id) {
-        return receiptRepository.getById(id);
+        return receiptRepository.findById(id);
     }
 
     @Override
     public List<Receipt> getAll() {
-        return receiptRepository.getAll();
+        return receiptRepository.findAll();
     }
 }

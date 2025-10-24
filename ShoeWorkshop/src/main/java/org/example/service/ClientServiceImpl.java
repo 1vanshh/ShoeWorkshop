@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.entities.Client;
-import org.example.repository.ClientRepository;
 import org.example.repository.ClientRepositoryImpl;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void update(int id, Client newClient) {
-        Client existing = clientRepository.getById(id);
+        Client existing = clientRepository.findById(id);
         if (existing == null) {
             System.out.println("Client with id" + id + " does not exist");
         }
@@ -33,12 +32,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getAll() {
-        return clientRepository.getAll();
+        return clientRepository.findAll();
     }
 
     @Override
     public Client getById(int id) {
-        return clientRepository.getById(id);
+        return clientRepository.findById(id);
     }
 
     @Override

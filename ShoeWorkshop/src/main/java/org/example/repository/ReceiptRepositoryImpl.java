@@ -35,12 +35,6 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     }
 
     @Override
-    public void removeAll() {
-        receipts.clear();
-        idCounter = 1;
-    }
-
-    @Override
     public void delete(int id) {
 
     }
@@ -56,12 +50,12 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     }
 
     @Override
-    public Receipt getById(int id) {
+    public Receipt findById(int id) {
         return receipts.get(id);
     }
 
     @Override
-    public List<Receipt> getAll() {
+    public List<Receipt> findAll() {
         return new ArrayList<>(receipts.values());
     }
 }
