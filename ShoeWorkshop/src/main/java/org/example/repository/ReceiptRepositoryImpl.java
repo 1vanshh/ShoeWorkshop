@@ -124,7 +124,7 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
             ps.setInt(1, id);
             ps.executeUpdate();
-            
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

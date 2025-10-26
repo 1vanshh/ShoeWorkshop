@@ -81,7 +81,7 @@ public class FavourRepositoryImpl implements FavourRepository {
     @Override
     public void delete(int id) {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();
