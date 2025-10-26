@@ -29,7 +29,7 @@ public class AddClientCommand implements Command {
         System.out.println("Please enter the client address: ");
         String address = scanner.nextLine();
 
-        Client client = new Client.Builder(0, fullName, address).phoneNumber(phoneNumber).email(email).build();
+        Client client = new Client.Builder(fullName, address).phoneNumber(phoneNumber).email(email).build();
         clientService.add(client);
 
         System.out.println("✅Client added successfully!");

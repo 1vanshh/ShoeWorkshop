@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Client {
-    private int clientId; // Обязательное
+    private int clientId; // Обязательное но не в конструкторе
     private String fullName; // Обязательное
     private String address; // Обязательное
     private String phoneNumber; // Необязательное
@@ -18,16 +18,20 @@ public class Client {
 
     public static class Builder {
         private int clientId;
+
         private String fullName;
         private String address;
 
         private String phoneNumber = null;
         private String email = null;
 
-        public Builder(int clientId, String fullName, String address) {
-            this.clientId = clientId;
+        public Builder(String fullName, String address) {
             this.fullName = fullName;
             this.address = address;
+        }
+        public Builder clientId(int clientId) {
+            this.clientId = clientId;
+            return this;
         }
         public Builder phoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
