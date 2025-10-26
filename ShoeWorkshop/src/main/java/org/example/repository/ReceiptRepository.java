@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ReceiptRepository extends Repository<Receipt> {
 
-    List<Receipt> findByDate(LocalDate date);
+    List<Receipt> findByClientId(int clientId);
+    void updateStatus(int receiptId, int newStatusId);
 }

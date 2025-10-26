@@ -80,8 +80,8 @@ public class ClientRepositoryImpl implements ClientRepository {
             ps.setString(2, object.getAddress());
             ps.setString(3, object.getPhoneNumber());
             ps.setString(4, object.getEmail());
-
             ps.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

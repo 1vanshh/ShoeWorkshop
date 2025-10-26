@@ -1,7 +1,9 @@
 package org.example.repository;
 
+import org.example.db.DatabaseConnection;
 import org.example.entities.Receipt;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,53 +11,132 @@ import java.util.List;
 import java.util.Map;
 
 public class ReceiptRepositoryImpl implements ReceiptRepository {
-    private final Map<Integer, Receipt> receipts = new HashMap<>();
-    private int idCounter = 1;
 
-    //TODO: Stream API
+    private String SELECT_BY_CLIENT_SQL = "SELECT * FROM receipt WHERE client_id = ?";
+    private String UPDATE_STATUS_SQL = "UPDATE receipt SET status_id = ? WHERE receipt_id = ?";
+    private String SELECT_BY_ID_SQL = "SELECT * FROM receipt WHERE receipt_id = ?";
+    private String SELECT_ALL_SQL = "SELECT * FROM receipt";
+    private String INSERT_SQL = "INSERT INTO receipts (client_id, status_id, order_date) VALUES (?, ?, ?)";
+    private String UPDATE_SQL = "UPDATE receipt SET client_id = ?, status_id = ?, order_date = ? WHERE id = ?";
+    private String DELETE_SQL = "DELETE FROM receipt WHERE receipt_id = ?";
+
     @Override
-    public List<Receipt> findByDate(LocalDate date) {
-        ArrayList<Receipt> receiptsAns = new ArrayList<>();
+    public List<Receipt> findByClientId(int clientId) {
+        List<Receipt> receipts = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_BY_CLIENT_SQL)) {
 
-        for (Receipt receipt : receipts.values()) {
-            if (receipt.getOrderDate().equals(date)) {
-                receiptsAns.add(receipt);
+            ps.setInt(1, clientId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    receipts.add(mapReceipt(rs));
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return receiptsAns;
+        return receipts;
     }
 
     @Override
-    public void add(Receipt object) {
-        if (object.getReceiptId() == 0) {
-            object.setReceiptId(idCounter);
-            idCounter++;
-        }
-        receipts.put(object.getReceiptId(), object);
-    }
+    public void updateStatus(int receiptId, int newStatusId) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS_SQL)) {
 
-    @Override
-    public void delete(int id) {
-
-    }
-
-    @Override
-    public void update(int id, Receipt newObject) {
-        if (receipts.containsKey(id)) {
-            newObject.setReceiptId(id);
-            receipts.put(id, newObject);
-        } else {
-            throw new IllegalArgumentException("Receipt with id " + id + " does not exist");
+            ps.setInt(1, newStatusId);
+            ps.setInt(2, receiptId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Receipt findById(int id) {
-        return receipts.get(id);
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
+
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapReceipt(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     @Override
     public List<Receipt> findAll() {
-        return new ArrayList<>(receipts.values());
+        List<Receipt> receipts = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL)) {
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    receipts.add(mapReceipt(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return receipts;
+    }
+
+    @Override
+    public void add(Receipt object) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
+
+            ps.setInt(1, object.getClientId());
+            ps.setInt(2, object.getStatusId());
+            ps.setDate(3, Date.valueOf(object.getOrderDate()));
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(int id, Receipt newObject) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+
+            ps.setInt(1, newObject.getClientId());
+            ps.setInt(2, newObject.getStatusId());
+            ps.setDate(3, Date.valueOf(newObject.getOrderDate()));
+            ps.setInt(4, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private Receipt mapReceipt(ResultSet rs) throws SQLException {
+        Receipt receipt = new Receipt();
+        receipt.setClientId(rs.getInt("client_id"));
+        receipt.setClientId(rs.getInt("client_id"));
+        receipt.setStatusId(rs.getInt("status_id"));
+        receipt.setOrderDate(rs.getDate("orderDate").toLocalDate());
+        return receipt;
     }
 }
