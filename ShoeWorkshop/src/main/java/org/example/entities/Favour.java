@@ -11,12 +11,12 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Favour {
     private int favourId; // Обязательно
-    private String serviceName; // Обязательно
-    private String basePrice; // Обязательно
+    private String favourName; // Обязательно
+    private Double basePrice; // Обязательно
 
-    public Favour(int favourId, String serviceName, String basePrice) {
+    public Favour(int favourId, String favourName, Double basePrice) {
         this.favourId = favourId;
-        this.serviceName = serviceName;
+        this.favourName = favourName;
         this.basePrice = basePrice;
     }
 }

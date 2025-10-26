@@ -1,47 +1,100 @@
 package org.example.repository;
 
+import org.example.db.DatabaseConfig;
+import org.example.db.DatabaseConnection;
 import org.example.entities.Favour;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.crypto.Data;
+import java.sql.*;
+import java.util.*;
 
 public class FavourRepositoryImpl implements FavourRepository {
-    private final Map<Integer, Favour> favours = new HashMap<>();
-    private int idCounter = 1;
 
-    @Override
-    public void add(Favour favour) {
-        if (favour.getFavourId() == 0) {
-            favour.setFavourId(idCounter);
-            idCounter++;
-        }
-        favours.put(favour.getFavourId(), favour);
-    }
-
-    @Override
-    public void delete(int id) {
-
-    }
-
-    @Override
-    public void update(int id, Favour newObject) {
-        if (favours.containsKey(id)) {
-            newObject.setFavourId(id);
-            favours.put(id, newObject);
-        } else {
-            throw new IllegalArgumentException("Favour with id " + id + " does not exist");
-        }
-    }
+    private String INSERT_SQL = "INSERT INTO favours(favour_name, base_price) VALUES (?, ?)";
+    private String SELECT_BY_ID_SQL = "SELECT * FROM favours WHERE favour_id = ?";
+    private String SELECT_ALL_SQL = "SELECT * FROM favours ORDER BY favour_id";
+    private String UPDATE_SQL = "UPDATE favours SET favour_name = ?, base_price = ? WHERE favour_id = ?";
+    private String DELETE_SQL = "DELETE FROM favours WHERE favour_id = ?";
 
     @Override
     public Favour findById(int id) {
-        return favours.get(id);
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
+
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapFavour(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     @Override
     public List<Favour> findAll() {
-        return new ArrayList<>(favours.values());
+        List<Favour> favours = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                favours.add(mapFavour(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return favours;
+    }
+
+    @Override
+    public void add(Favour object) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
+
+            ps.setString(1, object.toString());
+            ps.setDouble(2, object.getBasePrice());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(int id, Favour newObject) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+
+            ps.setString(1, newObject.toString());
+            ps.setDouble(2, newObject.getBasePrice());
+            ps.setInt(3, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Favour mapFavour(ResultSet rs) throws SQLException {
+        Favour favour = new Favour();
+        favour.setFavourId(rs.getInt("favour_id"));
+        favour.setFavourName(rs.getString("favour_name"));
+        favour.setBasePrice(rs.getDouble("base_price"));
+        return favour;
     }
 }

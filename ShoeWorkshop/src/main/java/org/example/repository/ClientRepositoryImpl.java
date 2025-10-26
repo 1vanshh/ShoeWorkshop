@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.db.DatabaseConfig;
+import org.example.db.DatabaseConnection;
 import org.example.entities.Client;
 
 import javax.xml.crypto.Data;
@@ -22,7 +23,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public Client findByEmail(String email) {
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_EMAIL_SQL)) {
 
             ps.setString(1, email);
@@ -39,7 +40,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public Client findById(int id) {
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
 
             ps.setInt(1, id);
@@ -57,7 +58,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> findAll() {
         List<Client> clients = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
              ResultSet rs = ps.executeQuery()) {
 
@@ -72,7 +73,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void add(Client object) {
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
 
             ps.setString(1, object.getFullName());
@@ -81,7 +82,6 @@ public class ClientRepositoryImpl implements ClientRepository {
             ps.setString(4, object.getEmail());
 
             ps.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -89,7 +89,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void update(int id, Client newObject) {
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
             ps.setString(1, newObject.getFullName());
@@ -99,7 +99,6 @@ public class ClientRepositoryImpl implements ClientRepository {
             ps.setInt(5, id);
 
             ps.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -107,7 +106,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void delete(int id) {
-        try (Connection conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUser(), DatabaseConfig.getPassword());
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
 
             ps.setInt(1, id);

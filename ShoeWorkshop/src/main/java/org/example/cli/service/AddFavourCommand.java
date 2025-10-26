@@ -20,7 +20,7 @@ public class AddFavourCommand implements Command {
         String name = scanner.nextLine();
 
         System.out.println("Enter favour base price");
-        String basePrice = scanner.nextLine();
+        Double basePrice = scanner.nextDouble();
 
         Favour favour = new Favour(1, name, basePrice);
         favourService.add(favour);
