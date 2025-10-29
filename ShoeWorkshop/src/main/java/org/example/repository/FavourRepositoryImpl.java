@@ -8,13 +8,13 @@ import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.*;
 
-public class FavourRepositoryImpl implements FavourRepository {
+public class  FavourRepositoryImpl implements FavourRepository {
 
-    private String INSERT_SQL = "INSERT INTO favours(favour_name, base_price) VALUES (?, ?)";
-    private String SELECT_BY_ID_SQL = "SELECT * FROM favours WHERE favour_id = ?";
-    private String SELECT_ALL_SQL = "SELECT * FROM favours ORDER BY favour_id";
-    private String UPDATE_SQL = "UPDATE favours SET favour_name = ?, base_price = ? WHERE favour_id = ?";
-    private String DELETE_SQL = "DELETE FROM favours WHERE favour_id = ?";
+    private final String INSERT_SQL = "INSERT INTO favours(favour_name, base_price) VALUES (?, ?)";
+    private final String SELECT_BY_ID_SQL = "SELECT * FROM favours WHERE favour_id = ?";
+    private final String SELECT_ALL_SQL = "SELECT * FROM favours ORDER BY favour_id";
+    private final String UPDATE_SQL = "UPDATE favours SET favour_name = ?, base_price = ? WHERE favour_id = ?";
+    private final String DELETE_SQL = "DELETE FROM favours WHERE favour_id = ?";
 
     @Override
     public Favour findById(int id) {

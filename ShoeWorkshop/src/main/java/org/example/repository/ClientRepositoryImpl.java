@@ -16,6 +16,15 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final String SELECT_ALL_SQL = "SELECT * FROM clients ORDER BY client_id";
     private final String UPDATE_SQL = "UPDATE clients SET full_name = ?, phone = ?, email = ?, address = ? WHERE client_id = ?";
     private final String DELETE_SQL = "DELETE FROM clients WHERE client_id = ?";
+    private final String OFFSET_SEARCH_SQL = """
+        SELECT client_id, full_name, phone, email, address
+        FROM clients
+        WHERE full_name ILIKE ? 
+           OR phone ILIKE ? 
+           OR email ILIKE ?
+        ORDER BY client_id
+        LIMIT ? OFFSET ?
+    """;
 
     public ClientRepositoryImpl() {
 
@@ -36,6 +45,31 @@ public class ClientRepositoryImpl implements ClientRepository {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public List<Client> searchClients(String query, int limit, int offset) {
+        List<Client> clients = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(OFFSET_SEARCH_SQL)) {
+
+            String pattern = "%" + query.trim() + "%";
+
+            ps.setString(1, pattern);
+            ps.setString(2, pattern);
+            ps.setString(3, pattern);
+            ps.setInt(4, limit);
+            ps.setInt(5, offset);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    clients.add(mapClient(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return clients;
     }
 
     @Override

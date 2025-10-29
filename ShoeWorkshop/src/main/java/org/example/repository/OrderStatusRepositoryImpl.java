@@ -14,11 +14,11 @@ import java.util.Map;
 
 public class OrderStatusRepositoryImpl implements OrderStatusRepository {
 
-    private String SELECT_BY_ID_SQL = "SELECT * FROM order_status WHERE status_id = ?";
-    private String SELECT_ALL_SQL = "SELECT * FROM order_status";
-    private String INSERT_SQL = "INSERT INTO order_status VALUES (?)";
-    private String UPDATE_SQL = "UPDATE order_status SET status_name = ? WHERE status_id = ?";
-    private String DELETE_SQL = "DELETE FROM order_status WHERE status_id = ?";
+    private final String SELECT_BY_ID_SQL = "SELECT * FROM order_status WHERE status_id = ?";
+    private final String SELECT_ALL_SQL = "SELECT * FROM order_status";
+    private final String INSERT_SQL = "INSERT INTO order_status VALUES (?)";
+    private final String UPDATE_SQL = "UPDATE order_status SET status_name = ? WHERE status_id = ?";
+    private final String DELETE_SQL = "DELETE FROM order_status WHERE status_id = ?";
 
     @Override
     public OrderStatus findById(int id) {

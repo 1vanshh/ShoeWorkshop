@@ -12,13 +12,13 @@ import java.util.Map;
 
 public class ReceiptRepositoryImpl implements ReceiptRepository {
 
-    private String SELECT_BY_CLIENT_SQL = "SELECT * FROM receipts WHERE client_id = ?";
-    private String UPDATE_STATUS_SQL = "UPDATE receipts SET status_id = ? WHERE receipt_id = ?";
-    private String SELECT_BY_ID_SQL = "SELECT * FROM receipts WHERE receipt_id = ?";
-    private String SELECT_ALL_SQL = "SELECT * FROM receipts";
-    private String INSERT_SQL = "INSERT INTO receipts (client_id, status_id, order_date) VALUES (?, ?, ?)";
-    private String UPDATE_SQL = "UPDATE receipts SET client_id = ?, status_id = ?, order_date = ? WHERE id = ?";
-    private String DELETE_SQL = "DELETE FROM receipts WHERE receipt_id = ?";
+    private final String SELECT_BY_CLIENT_SQL = "SELECT * FROM receipts WHERE client_id = ?";
+    private final String UPDATE_STATUS_SQL = "UPDATE receipts SET status_id = ? WHERE receipt_id = ?";
+    private final String SELECT_BY_ID_SQL = "SELECT * FROM receipts WHERE receipt_id = ?";
+    private final String SELECT_ALL_SQL = "SELECT * FROM receipts";
+    private final String INSERT_SQL = "INSERT INTO receipts (client_id, status_id, order_date) VALUES (?, ?, ?)";
+    private final String UPDATE_SQL = "UPDATE receipts SET client_id = ?, status_id = ?, order_date = ? WHERE id = ?";
+    private final String DELETE_SQL = "DELETE FROM receipts WHERE receipt_id = ?";
 
     @Override
     public List<Receipt> findByClientId(int clientId) {
