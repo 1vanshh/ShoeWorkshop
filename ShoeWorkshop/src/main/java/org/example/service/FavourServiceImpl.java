@@ -1,46 +1,53 @@
 package org.example.service;
 
 import org.example.entities.Favour;
+import org.example.repository.FavourRepository;
 import org.example.repository.FavourRepositoryImpl;
+import org.example.security.InputValidator;
 
+import java.math.BigDecimal;
 import java.util.List;
-
+//! Добавить поиск по имени
 public class FavourServiceImpl implements FavourService {
-    private final FavourRepositoryImpl serviceRepository;
 
-    public FavourServiceImpl(FavourRepositoryImpl serviceRepository) {
-        this.serviceRepository = serviceRepository;
-    }
-
+    private final FavourRepository favourRepository = new FavourRepositoryImpl();
 
     @Override
     public void add(Favour object) {
-        if (serviceRepository.findById(object.getFavourId()) != null) {
-            throw new IllegalArgumentException("Service already exists");
+        if (object.getBasePrice() == null || object.getBasePrice() <= 0) {
+            throw new IllegalArgumentException("Base price must be greater than zero");
         }
-        serviceRepository.add(object);
+        favourRepository.add(object);
     }
 
     @Override
     public void update(int id, Favour newObject) {
-        if (serviceRepository.findById(id) == null) {
-            throw new IllegalArgumentException("Service does not exist");
+        Favour existing = favourRepository.findById(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("Favour not found");
         }
-        serviceRepository.update(id, newObject);
+        if (newObject.getBasePrice() == null || newObject.getBasePrice() <= 0) {
+            throw new IllegalArgumentException("Base price must be greater than zero");
+        }
+        favourRepository.update(id, newObject);
     }
 
     @Override
     public void delete(int id) {
-
+        Favour existing = favourRepository.findById(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("Favour not found");
+        }
+        favourRepository.delete(id);
     }
 
     @Override
     public Favour getById(int id) {
-        return null;
+        return favourRepository.findById(id);
     }
 
     @Override
     public List<Favour> getAll() {
-        return List.of();
+        return favourRepository.findAll();
     }
 }

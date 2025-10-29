@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Client {
-    private int clientId; // Обязательное но не в конструкторе
+    private int clientId; // Обязательное, но не в конструкторе
     private String fullName; // Обязательное
     private String address; // Обязательное
     private String phoneNumber; // Необязательное
