@@ -8,9 +8,7 @@ import java.util.Properties;
 public class DatabaseConfig {
 
     private static final String PROPERTIES_FILE = "db.properties";
-    private static final String url;
-    private static final String user;
-    private static final String password;
+    private static final Properties props = new Properties();
 
     static {
         try (InputStream input = DatabaseConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
@@ -18,27 +16,17 @@ public class DatabaseConfig {
                 throw new RuntimeException("Файл " + PROPERTIES_FILE + " не найден в classpath!");
             }
 
-            Properties props = new Properties();
             props.load(input);
-
-            url = props.getProperty("db.url");
-            user = props.getProperty("db.user");
-            password = props.getProperty("db.password");
 
         } catch (IOException e) {
             throw new RuntimeException("Ошибка при чтении " + PROPERTIES_FILE, e);
         }
     }
 
-    public static String getUrl() {
-        return url;
-    }
-
-    public static String getUser() {
-        return user;
-    }
-
-    public static String getPassword() {
-        return password;
+    public static String getProperty(String key) {
+        if (!props.containsKey(key)) {
+            throw new IllegalArgumentException("Свойство с ключом '" + key + "' не найдено в " + PROPERTIES_FILE);
+        }
+        return props.getProperty(key);
     }
 }

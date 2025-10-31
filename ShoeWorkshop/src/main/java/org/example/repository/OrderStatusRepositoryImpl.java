@@ -16,9 +16,28 @@ public class OrderStatusRepositoryImpl implements OrderStatusRepository {
 
     private final String SELECT_BY_ID_SQL = "SELECT * FROM order_status WHERE status_id = ?";
     private final String SELECT_ALL_SQL = "SELECT * FROM order_status";
+    private final String SELECT_BY_NAME_SQL = "SELECT * FROM order_status WHERE status_name = ?";
     private final String INSERT_SQL = "INSERT INTO order_status VALUES (?)";
     private final String UPDATE_SQL = "UPDATE order_status SET status_name = ? WHERE status_id = ?";
     private final String DELETE_SQL = "DELETE FROM order_status WHERE status_id = ?";
+
+    @Override
+    public OrderStatus findByName(String orderStatusName) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_NAME_SQL)) {
+
+            stmt.setString(1, orderStatusName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapOrderStatus(rs);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
     @Override
     public OrderStatus findById(int id) {

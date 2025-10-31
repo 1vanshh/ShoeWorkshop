@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ReceiptItemRepository extends Repository<ReceiptItem> {
 
-    List<ReceiptItem> findByReceiptID(int receiptID);
+    List<ReceiptItem> findByReceiptId(int receiptID);
+    void deleteByReceiptId(int receiptID);
 }

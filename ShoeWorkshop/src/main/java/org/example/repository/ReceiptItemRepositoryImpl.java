@@ -17,9 +17,10 @@ public class ReceiptItemRepositoryImpl implements ReceiptItemRepository {
     private final String INSERT_SQL = "INSERT INTO recepts_items (receipt_id, favour_id, price, quantity) VALUES (?, ?, ?, ?)";
     private final String UPDATE_SQL = "UPDATE receipt_items SET receipt_id = ?, favour_id = ?, price = ?, quantity = ? WHERE item_id = ?";
     private final String DELETE_SQL = "DELETE FROM receipt_items WHERE item_id = ?";
+    private final String DELETE_BY_RECEIPT_ID_SQL = "DELETE FROM receipt_items WHERE receipt_id = ?";
 
     @Override
-    public List<ReceiptItem> findByReceiptID(int receiptID) {
+    public List<ReceiptItem> findByReceiptId(int receiptID) {
         List<ReceiptItem> receiptItems = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement pr = conn.prepareStatement(SELECT_BY_RECEIPT_SQL)) {
@@ -34,6 +35,18 @@ public class ReceiptItemRepositoryImpl implements ReceiptItemRepository {
             throw new RuntimeException(e);
         }
         return receiptItems;
+    }
+
+    @Override
+    public void deleteByReceiptId(int receiptID) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_BY_RECEIPT_ID_SQL)) {
+
+            ps.setInt(1, receiptID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -119,7 +132,7 @@ public class ReceiptItemRepositoryImpl implements ReceiptItemRepository {
         receiptItem.setReceiptId(rs.getInt("receipt_id"));
         receiptItem.setFavourId(rs.getInt("favour_id"));
         receiptItem.setPrice(rs.getInt("price"));
-        receiptItem.setQuantity(rs.getInt("quantity")); final
+        receiptItem.setQuantity(rs.getInt("quantity"));
         return receiptItem;
     }
 }

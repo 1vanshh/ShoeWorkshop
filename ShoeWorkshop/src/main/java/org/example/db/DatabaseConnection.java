@@ -26,9 +26,9 @@ public class DatabaseConnection {
         try {
 
             connection = DriverManager.getConnection(
-                    DatabaseConfig.getUrl(),
-                    DatabaseConfig.getUser(),
-                    DatabaseConfig.getPassword()
+                    DatabaseConfig.getProperty("db.url"),
+                    DatabaseConfig.getProperty("db.user"),
+                    DatabaseConfig.getProperty("db.password")
             );
 
             System.out.println("Соединение с базой данных установлено.");
