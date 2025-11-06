@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entities.Receipt;
+import org.example.entities.ReceiptItem;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,4 +30,6 @@ public interface ReceiptService extends Service<Receipt> {
 
     // получить все квитанции клиента
     List<Receipt> getByClientId(int clientId);
+
+    List<ReceiptItem> getItemsByReceiptId(int receiptId);
 }

@@ -12,13 +12,26 @@ import java.util.Map;
 
 public class ReceiptRepositoryImpl implements ReceiptRepository {
 
-    private final String SELECT_BY_CLIENT_SQL = "SELECT * FROM receipts WHERE client_id = ?";
-    private final String UPDATE_STATUS_SQL = "UPDATE receipts SET status_id = ? WHERE receipt_id = ?";
-    private final String SELECT_BY_ID_SQL = "SELECT * FROM receipts WHERE receipt_id = ?";
-    private final String SELECT_ALL_SQL = "SELECT * FROM receipts";
-    private final String INSERT_SQL = "INSERT INTO receipts (client_id, status_id, order_date) VALUES (?, ?, ?)";
-    private final String UPDATE_SQL = "UPDATE receipts SET client_id = ?, status_id = ?, order_date = ? WHERE id = ?";
-    private final String DELETE_SQL = "DELETE FROM receipts WHERE receipt_id = ?";
+    private final String SELECT_BY_CLIENT_SQL =
+            "SELECT * FROM receipts WHERE client_id = ?";
+
+    private final String UPDATE_STATUS_SQL =
+            "UPDATE receipts SET status_id = ? WHERE receipt_id = ?";
+
+    private final String SELECT_BY_ID_SQL =
+            "SELECT * FROM receipts WHERE receipt_id = ?";
+
+    private final String SELECT_ALL_SQL =
+            "SELECT * FROM receipts";
+
+    private final String INSERT_SQL =
+            "INSERT INTO receipts (client_id, status_id, order_date) VALUES (?, ?, ?)";
+
+    private final String UPDATE_SQL =
+            "UPDATE receipts SET client_id = ?, status_id = ?, order_date = ? WHERE receipt_id = ?";
+
+    private final String DELETE_SQL =
+            "DELETE FROM receipts WHERE receipt_id = ?";
 
     @Override
     public List<Receipt> findByClientId(int clientId) {
@@ -88,6 +101,9 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Override
     public void add(Receipt object) {
+        if (object.getOrderDate() == null) {
+            object.setOrderDate(LocalDate.now());
+        }
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
 
@@ -133,10 +149,11 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     private Receipt mapReceipt(ResultSet rs) throws SQLException {
         Receipt receipt = new Receipt();
-        receipt.setClientId(rs.getInt("client_id"));
+        receipt.setReceiptId(rs.getInt("receipt_id"));
         receipt.setClientId(rs.getInt("client_id"));
         receipt.setStatusId(rs.getInt("status_id"));
-        receipt.setOrderDate(rs.getDate("orderDate").toLocalDate());
+        Date od = rs.getDate("order_date");
+        receipt.setOrderDate(od != null ? od.toLocalDate() : null);
         return receipt;
     }
 }

@@ -9,7 +9,7 @@
 
     <!-- ✅ Главная страница -->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>home</welcome-file>
     </welcome-file-list>
 
     <!-- ✅ Фильтры безопасности -->

@@ -19,6 +19,14 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final FavourRepositoryImpl favourRepository = new FavourRepositoryImpl();
 
     @Override
+    public List<ReceiptItem> getItemsByReceiptId(int receiptId) {
+        if (receiptId <= 0) {
+            throw new IllegalArgumentException("receiptId must be > 0");
+        }
+        return receiptItemRepository.findByReceiptId(receiptId);
+    }
+
+    @Override
     public Receipt createReceipt(int clientId, int statusId) {
 
         Receipt receipt = new Receipt();
