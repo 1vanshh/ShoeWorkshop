@@ -1,67 +1,68 @@
 package org.example.db;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public final class DatabaseConnection {
 
-    private Connection connection;
-    private static DatabaseConnection instance;
+    private static volatile DatabaseConnection instance;
+    private volatile Connection connection;
 
     private DatabaseConnection() {
-        connect();
+        connectOrThrow();
     }
 
     public static DatabaseConnection getInstance() {
         if (instance == null) {
-            instance = new DatabaseConnection();
+            synchronized (DatabaseConnection.class) {
+                if (instance == null) instance = new DatabaseConnection();
+            }
         }
         return instance;
     }
 
-    public Connection connect() {
+    private void connectOrThrow() {
         try {
+            // ЯВНО регистрируем драйвер PostgreSQL
+            Class.forName("org.postgresql.Driver");
 
-            connection = DriverManager.getConnection(
-                    DatabaseConfig.getProperty("db.url"),
-                    DatabaseConfig.getProperty("db.user"),
-                    DatabaseConfig.getProperty("db.password")
-            );
+            final String url  = DatabaseConfig.getProperty("db.url");
+            final String user = DatabaseConfig.getProperty("db.user");
+            final String pass = DatabaseConfig.getProperty("db.password");
 
-            System.out.println("Соединение с базой данных установлено.");
-        } catch (SQLException e) {
-            System.out.println("Ошибка подключения: " + e.getMessage());
+            Connection conn = DriverManager.getConnection(url, user, pass);
+
+            // Быстрая проверка соединения (если драйвер поддерживает)
+            try {
+                if (!conn.isValid(2)) throw new SQLException("Connection is not valid");
+            } catch (AbstractMethodError ignored) { }
+
+            this.connection = conn;
+            System.out.println("✅ Соединение с БД установлено");
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Ошибка подключения к БД: " + e.getMessage(), e);
         }
-        return null;
     }
 
-    public boolean isConnected() {
-        try {
-            return connection != null && !connection.isClosed();
-        } catch (SQLException e) {
-            return false;
-        }
+    private boolean alive() {
+        try { return connection != null && !connection.isClosed(); }
+        catch (SQLException e) { return false; }
     }
 
     public Connection getConnection() {
-        if (!isConnected()) {
-            System.out.println("Соединение остановлено. Переподключение...");
-            connect();
+        if (!alive()) {
+            System.out.println("♻️ Переподключение к БД...");
+            connectOrThrow();
         }
         return connection;
     }
 
     public void closeConnection() {
         if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Соединение остановлено.");
-            } catch (SQLException e) {
-                System.out.println("Возникла ошибка при остановке соединения: " + e.getMessage());
-            }
+            try { connection.close(); System.out.println("✅ Соединение закрыто"); }
+            catch (SQLException ignored) { }
+            finally { connection = null; }
         }
     }
 }

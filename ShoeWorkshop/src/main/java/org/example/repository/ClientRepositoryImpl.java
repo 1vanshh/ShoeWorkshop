@@ -154,7 +154,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         Client client = new Client();
         client.setClientId(rs.getInt("client_id"));
         client.setFullName(rs.getString("full_name"));
-        client.setAddress(rs.getString("phone"));
+        client.setPhoneNumber(rs.getString("phone"));
         client.setEmail(rs.getString("email"));
         client.setAddress(rs.getString("address"));
         return client;

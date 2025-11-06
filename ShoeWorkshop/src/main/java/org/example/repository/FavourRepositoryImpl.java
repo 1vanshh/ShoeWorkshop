@@ -54,7 +54,7 @@ public class  FavourRepositoryImpl implements FavourRepository {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
 
-            ps.setString(1, object.toString());
+            ps.setString(1, object.getFavourName());
             ps.setDouble(2, object.getBasePrice());
 
             ps.executeUpdate();
@@ -68,7 +68,7 @@ public class  FavourRepositoryImpl implements FavourRepository {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
-            ps.setString(1, newObject.toString());
+            ps.setString(1, newObject.getFavourName());
             ps.setDouble(2, newObject.getBasePrice());
             ps.setInt(3, id);
 

@@ -38,6 +38,8 @@ public class ClientServiceImpl implements ClientService {
         if (!InputValidator.isSafeString(object.getFullName(), 100)) {
             throw new IllegalArgumentException("Full name is invalid");
         }
+
+        clientRepository.add(object);
     }
 
     @Override

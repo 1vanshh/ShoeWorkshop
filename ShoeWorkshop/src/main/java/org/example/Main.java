@@ -14,11 +14,11 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 //        Menu.run();
         ClientRepositoryImpl repo = new ClientRepositoryImpl();
-        Client client = new Client.Builder("JJJJJJJJJJJ", "VRN").email("Shama228@vsu.ru").build();
+        Client client = new Client.Builder("JJasdasdasdasdasJJJJJJJJJ", "VRN").email("Shama228@vsu.ru").build();
 
-//        repo.add(client);
-        String a = DatabaseConfig.getProperty("db.password");
-        System.out.println(a);
+        repo.add(client);
+//        String a = DatabaseConfig.getProperty("db.password");
+//        System.out.println(a);
 //        repo.delete(1010);
 
     }

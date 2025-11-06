@@ -8,7 +8,6 @@ import org.example.security.HtmlSanitizerUtil;
 import java.io.IOException;
 import java.util.*;
 
-@WebFilter("/*")
 public class InputSanitizationFilter implements Filter {
 
     @Override
