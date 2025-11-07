@@ -2,21 +2,25 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
+  <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
   <meta charset="UTF-8"/>
   <title>ShoeWorkshop — главная</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/vintage.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 
 <header class="header">
   <div class="container">
-    <div class="brand">ShoeWorkshop</div>
+    <!-- Логотип-кнопка на главную -->
+    <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
+
     <nav class="nav">
       <a href="${pageContext.request.contextPath}/home">Главная</a>
       <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
-      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
       <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
+      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
     </nav>
   </div>
 </header>

@@ -5,19 +5,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
+  <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
   <meta charset="UTF-8"/>
   <title>Квитанции</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/vintage.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 
 <header class="header">
   <div class="container">
-    <div class="brand">ShoeWorkshop</div>
+    <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
     <nav class="nav">
+      <a href="${pageContext.request.contextPath}/home">Главная</a>
       <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
-      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
       <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
+      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
     </nav>
   </div>
 </header>
@@ -60,11 +63,16 @@
             </c:choose>
           </td>
           <td>
-            <a class="btn ghost" href="${pageContext.request.contextPath}/receipts?action=getById&id=${r.receiptId}">Открыть</a>
-            <form method="post" action="${pageContext.request.contextPath}/receipts" style="display:inline" onsubmit="return confirm('Удалить квитанцию?')">
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="id"     value="${r.receiptId}">
-              <input type="hidden" name="_csrf"  value="${csrfToken}">
+            <a class="btn ghost"
+               href="${pageContext.request.contextPath}/receipts?action=getById&id=${r.receiptId}">Открыть</a>
+
+            <form method="post"
+                  action="${pageContext.request.contextPath}/receipts"
+                  style="display:inline"
+                  onsubmit="return confirm('Удалить квитанцию?')">
+              <input type="hidden" name="action"    value="delete">
+              <input type="hidden" name="id"        value="${r.receiptId}">
+              <input type="hidden" name="csrfToken" value="${csrfToken}">
               <button class="btn danger" type="submit">Удалить</button>
             </form>
           </td>
@@ -83,22 +91,26 @@
     <h2>Создать квитанцию</h2>
 
     <form method="post" action="${pageContext.request.contextPath}/receipts">
-      <input type="hidden" name="action" value="create">
-      <input type="hidden" name="_csrf"  value="${csrfToken}">
+      <input type="hidden" name="action"    value="create">
+      <input type="hidden" name="csrfToken" value="${csrfToken}">
 
       <label>Клиент (ID)</label>
       <input class="input" type="number" name="clientId" min="1" required>
 
       <label style="margin-top:8px;">Статус (ID)</label>
       <input class="input" type="number" name="statusId" min="1" required>
-      <!-- Если ты прокидываешь список статусов через request.setAttribute("statuses", ...),
-           можно заменить на <select>:
-        <select class="select" name="statusId" required>
-          <c:forEach var="s" items="${statuses}">
-            <option value="${s.statusId}">${fn:escapeXml(s.statusName)}</option>
-          </c:forEach>
-        </select>
-      -->
+
+      <%--
+      Если начнёшь прокидывать список статусов в request как "statuses",
+      раскомментируй это и УДАЛИ input выше:
+
+      <label style="margin-top:8px;">Статус</label>
+      <select class="select" name="statusId" required>
+        <c:forEach var="s" items="${statuses}">
+          <option value="${s.statusId}">${fn:escapeXml(s.statusName)}</option>
+        </c:forEach>
+      </select>
+      --%>
 
       <div class="row" style="margin-top:12px;">
         <button class="btn" type="submit">Создать</button>

@@ -14,7 +14,7 @@ public class ReceiptItemRepositoryImpl implements ReceiptItemRepository {
     private final String SELECT_BY_RECEIPT_SQL = "SELECT * FROM receipt_items WHERE receipt_id = ?";
     private final String SELECT_BY_ID_SQL = "SELECT * FROM receipt_items WHERE item_id = ?";
     private final String SELECT_ALL_SQL = "SELECT * FROM receipt_items";
-    private final String INSERT_SQL = "INSERT INTO recepts_items (receipt_id, favour_id, price, quantity) VALUES (?, ?, ?, ?)";
+    private final String INSERT_SQL = "INSERT INTO receipt_items (receipt_id, favour_id, price, quantity) VALUES (?, ?, ?, ?)";
     private final String UPDATE_SQL = "UPDATE receipt_items SET receipt_id = ?, favour_id = ?, price = ?, quantity = ? WHERE item_id = ?";
     private final String DELETE_SQL = "DELETE FROM receipt_items WHERE item_id = ?";
     private final String DELETE_BY_RECEIPT_ID_SQL = "DELETE FROM receipt_items WHERE receipt_id = ?";

@@ -4,16 +4,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
+    <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
     <meta charset="UTF-8"/>
     <title>Клиенты</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/vintage.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 
 <header class="header">
     <div class="container">
-        <div class="brand">ShoeWorkshop</div>
+        <!-- Логотип-кнопка на главную -->
+        <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
+
         <nav class="nav">
+            <a href="${pageContext.request.contextPath}/home">Главная</a>
             <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
             <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
             <a href="${pageContext.request.contextPath}/favours">Услуги</a>
@@ -98,14 +103,6 @@
                 <button class="btn" type="submit">Сохранить</button>
                 <button class="btn secondary" type="reset">Очистить</button>
             </div>
-        </form>
-
-        <hr class="hr">
-        <h3>Найти по email</h3>
-        <form class="row" method="get" action="${pageContext.request.contextPath}/clients">
-            <input type="hidden" name="action" value="findByEmail">
-            <input class="input" type="email" name="email" placeholder="e.g. user@mail.com" required>
-            <button class="btn" type="submit">Найти</button>
         </form>
     </aside>
 </main>

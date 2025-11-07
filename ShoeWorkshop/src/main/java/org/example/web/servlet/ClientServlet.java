@@ -52,10 +52,10 @@ public class ClientServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "add" -> addClient(req, resp);
-                case "update" -> updateClient(req, resp);
-                case "delete" -> deleteClient(req, resp);
-                default -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action");
+                case "add"      -> addClient(req, resp);
+                case "update"   -> updateClient(req, resp);
+                case "delete"   -> deleteClient(req, resp);
+                default         -> resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action");
             }
         } catch (Exception e) {
             req.setAttribute("error", e.getMessage());

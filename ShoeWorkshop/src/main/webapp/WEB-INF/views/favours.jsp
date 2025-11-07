@@ -1,21 +1,26 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  <!-- ДОБАВЛЕНО -->
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
+  <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
   <meta charset="UTF-8"/>
   <title>Услуги</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/vintage.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <header class="header">
   <div class="container">
-    <div class="brand">ShoeWorkshop</div>
+    <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
     <nav class="nav">
+      <a href="${pageContext.request.contextPath}/home">Главная</a>
       <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
-      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
       <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
+      <a href="${pageContext.request.contextPath}/favours">Услуги</a>
     </nav>
   </div>
 </header>
@@ -37,7 +42,17 @@
         <tr>
           <td>${f.favourId}</td>
           <td>${fn:escapeXml(f.favourName)}</td>
-          <td><fmt:formatNumber value="${f.basePrice}" type="number" minFractionDigits="2" maxFractionDigits="2"/></td>
+          <td>
+            <c:choose>
+              <c:when test="${f.basePrice != null}">
+                <fmt:formatNumber value="${f.basePrice}"
+                                  type="number"
+                                  minFractionDigits="2"
+                                  maxFractionDigits="2"/>
+              </c:when>
+              <c:otherwise>—</c:otherwise>
+            </c:choose>
+          </td>
           <td>
             <a class="btn ghost" href="${pageContext.request.contextPath}/favours?action=getById&id=${f.favourId}">Открыть</a>
             <form method="post" action="${pageContext.request.contextPath}/favours" style="display:inline" onsubmit="return confirm('Удалить услугу?')">
@@ -66,7 +81,8 @@
       <input class="input" type="text" name="favourName" required>
 
       <label style="margin-top:8px;">Базовая цена</label>
-      <input class="input" type="text" name="basePrice" placeholder="например, 500.00" required>
+      <!-- number/step удобнее для цены -->
+      <input class="input" type="number" step="0.01" min="0" name="basePrice" placeholder="например, 500.00" required>
 
       <div class="row" style="margin-top:12px;">
         <button class="btn" type="submit">Сохранить</button>

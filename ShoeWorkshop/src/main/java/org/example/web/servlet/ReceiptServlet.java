@@ -3,7 +3,10 @@ package org.example.web.servlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.example.entities.OrderStatus;
 import org.example.entities.Receipt;
+import org.example.service.OrderStatusService;
+import org.example.service.OrderStatusServiceImpl;
 import org.example.service.ReceiptService;
 import org.example.service.ReceiptServiceImpl;
 
@@ -15,6 +18,7 @@ import java.util.UUID;
 public class ReceiptServlet extends HttpServlet {
 
     private final ReceiptService receiptService = new ReceiptServiceImpl();
+    private final OrderStatusService orderStatusService = new OrderStatusServiceImpl();
 
     // ===== helpers =====
     private void ensureCsrf(HttpServletRequest req) {
@@ -89,9 +93,19 @@ public class ReceiptServlet extends HttpServlet {
         Receipt r = receiptService.getById(id);
         if (r == null) throw new IllegalArgumentException("Receipt not found: " + id);
 
+        // список статусов для выпадающего списка
+        req.setAttribute("statuses", orderStatusService.getAll());
+
+        // имя текущего статуса
+        OrderStatus current = orderStatusService.getById(r.getStatusId());
+        req.setAttribute("currentStatusName",
+                current != null ? current.getStatusName() : "—");
+
+        // остальное как у тебя уже было:
         req.setAttribute("receipt", r);
-        req.setAttribute("items",  receiptService.getItemsByReceiptId(id));
-        req.setAttribute("total",  receiptService.calculateTotal(id));
+        req.setAttribute("items", receiptService.getItemsByReceiptId(id));
+        req.setAttribute("total", receiptService.calculateTotal(id));
+
         req.getRequestDispatcher("/WEB-INF/views/receipt-detail.jsp").forward(req, resp);
     }
 

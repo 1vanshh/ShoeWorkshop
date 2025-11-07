@@ -5,18 +5,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
+  <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
   <meta charset="UTF-8"/>
   <title>Квитанция #${receipt.receiptId}</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/vintage.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 
 <header class="header">
   <div class="container">
-    <div class="brand">ShoeWorkshop</div>
+    <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
     <nav class="nav">
-      <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
+      <a href="${pageContext.request.contextPath}/home">Главная</a>
       <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
+      <a href="${pageContext.request.contextPath}/receipts">Квитанции</a>
       <a href="${pageContext.request.contextPath}/favours">Услуги</a>
     </nav>
   </div>
@@ -34,7 +37,7 @@
 
     <div class="row">
       <div><b>Клиент (ID):</b> ${receipt.clientId}</div>
-      <div style="margin-left:16px;"><b>Статус (ID):</b> ${receipt.statusId}</div>
+      <div style="margin-left:16px;"><b>Статус:</b> ${fn:escapeXml(currentStatusName)}</div>
       <div style="margin-left:16px;">
         <b>Дата:</b>
         <c:choose>
@@ -89,7 +92,7 @@
     <h3>Добавить позицию</h3>
     <form method="post" action="${pageContext.request.contextPath}/receipts">
       <input type="hidden" name="action"     value="addItem">
-      <input type="hidden" name="_csrf"      value="${csrfToken}">
+      <input type="hidden" name="csrfToken"  value="${csrfToken}">
       <input type="hidden" name="receiptId"  value="${receipt.receiptId}">
 
       <label>Услуга (ID)</label>
@@ -110,21 +113,19 @@
 
     <h3>Сменить статус</h3>
     <form method="post" action="${pageContext.request.contextPath}/receipts">
-      <input type="hidden" name="action"    value="changeStatus">
-      <input type="hidden" name="_csrf"     value="${csrfToken}">
-      <input type="hidden" name="receiptId" value="${receipt.receiptId}">
+      <input type="hidden" name="action"     value="changeStatus">
+      <input type="hidden" name="csrfToken"  value="${csrfToken}">
+      <input type="hidden" name="receiptId"  value="${receipt.receiptId}">
 
-      <!-- Вариант 1: ввод ID вручную -->
-      <label>Новый статус (ID)</label>
-      <input class="input" type="number" name="statusId" min="1" required>
-
-      <!-- Вариант 2: если прокинешь список статусов:
+      <label>Новый статус</label>
       <select class="select" name="statusId" required>
         <c:forEach var="s" items="${statuses}">
-          <option value="${s.statusId}">${fn:escapeXml(s.statusName)}</option>
+          <option value="${s.statusId}"
+                  <c:if test="${s.statusId == receipt.statusId}">selected</c:if>>
+              ${fn:escapeXml(s.statusName)}
+          </option>
         </c:forEach>
       </select>
-      -->
 
       <div class="row" style="margin-top:12px;">
         <button class="btn" type="submit">Применить</button>
@@ -134,20 +135,22 @@
     <hr class="hr"/>
 
     <h3>Финализировать чек</h3>
-    <form method="post" action="${pageContext.request.contextPath}/receipts" onsubmit="return confirm('Финализировать чек?')">
-      <input type="hidden" name="action"    value="finalize">
-      <input type="hidden" name="_csrf"     value="${csrfToken}">
-      <input type="hidden" name="receiptId" value="${receipt.receiptId}">
+    <form method="post" action="${pageContext.request.contextPath}/receipts"
+          onsubmit="return confirm('Финализировать чек?')">
+      <input type="hidden" name="action"     value="finalize">
+      <input type="hidden" name="csrfToken"  value="${csrfToken}">
+      <input type="hidden" name="receiptId"  value="${receipt.receiptId}">
       <button class="btn" type="submit">Финализировать</button>
     </form>
 
     <hr class="hr"/>
 
     <h3>Удалить чек</h3>
-    <form method="post" action="${pageContext.request.contextPath}/receipts" onsubmit="return confirm('Удалить квитанцию полностью?')">
-      <input type="hidden" name="action" value="delete">
-      <input type="hidden" name="_csrf"  value="${csrfToken}">
-      <input type="hidden" name="id"     value="${receipt.receiptId}">
+    <form method="post" action="${pageContext.request.contextPath}/receipts"
+          onsubmit="return confirm('Удалить квитанцию полностью?')">
+      <input type="hidden" name="action"     value="delete">
+      <input type="hidden" name="csrfToken"  value="${csrfToken}">
+      <input type="hidden" name="id"         value="${receipt.receiptId}">
       <button class="btn danger" type="submit">Удалить</button>
     </form>
 
