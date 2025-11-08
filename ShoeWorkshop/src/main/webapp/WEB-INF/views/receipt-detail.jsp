@@ -134,13 +134,13 @@
 
     <hr class="hr"/>
 
-    <h3>Финализировать чек</h3>
+    <h3>Завершить чек</h3>
     <form method="post" action="${pageContext.request.contextPath}/receipts"
-          onsubmit="return confirm('Финализировать чек?')">
+          onsubmit="return confirm('Подсчитать чек?')">
       <input type="hidden" name="action"     value="finalize">
       <input type="hidden" name="csrfToken"  value="${csrfToken}">
       <input type="hidden" name="receiptId"  value="${receipt.receiptId}">
-      <button class="btn" type="submit">Финализировать</button>
+      <button class="btn" type="submit">Завершить</button>
     </form>
 
     <hr class="hr"/>

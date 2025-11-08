@@ -122,7 +122,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         System.out.println("Итоговая сумма квитанции №" + receiptId + ": " + total);
 
         // меняем статус на "Выдан"
-        OrderStatus readyStatus = orderStatusRepository.findByName("Выдан");
+        OrderStatus readyStatus = orderStatusRepository.findById(3);
         if (readyStatus != null) {
             receiptRepository.updateStatus(receiptId, readyStatus.getStatusId());
         }
