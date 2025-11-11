@@ -3,12 +3,10 @@ package org.example.web.servlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.example.entities.Client;
 import org.example.entities.OrderStatus;
 import org.example.entities.Receipt;
-import org.example.service.OrderStatusService;
-import org.example.service.OrderStatusServiceImpl;
-import org.example.service.ReceiptService;
-import org.example.service.ReceiptServiceImpl;
+import org.example.service.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +17,7 @@ public class ReceiptServlet extends HttpServlet {
 
     private final ReceiptService receiptService = new ReceiptServiceImpl();
     private final OrderStatusService orderStatusService = new OrderStatusServiceImpl();
+    private final ClientService clientService = new ClientServiceImpl();
 
     // ===== helpers =====
     private void ensureCsrf(HttpServletRequest req) {
@@ -88,26 +87,38 @@ public class ReceiptServlet extends HttpServlet {
     private void getById(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         ensureCsrf(req);
+
         int id = Integer.parseInt(req.getParameter("id"));
 
         Receipt r = receiptService.getById(id);
-        if (r == null) throw new IllegalArgumentException("Receipt not found: " + id);
+        if (r == null) {
+            throw new IllegalArgumentException("Receipt not found: " + id);
+        }
 
-        // список статусов для выпадающего списка
+        // Прокидываем сам объект квитанции
+        req.setAttribute("receipt", r);
+
+        // Клиент квитанции: отдадим и объект, и строку ФИО (на выбор в JSP)
+        Client client = clientService.getById(r.getClientId());
+        req.setAttribute("receiptClient", client);
+        req.setAttribute("clientName", (client != null ? client.getFullName() : null));
+
+        // Список статусов для выпадающего списка
         req.setAttribute("statuses", orderStatusService.getAll());
 
-        // имя текущего статуса
+        // Имя текущего статуса
         OrderStatus current = orderStatusService.getById(r.getStatusId());
         req.setAttribute("currentStatusName",
                 current != null ? current.getStatusName() : "—");
 
-        // остальное как у тебя уже было:
-        req.setAttribute("receipt", r);
+        // Позиции и итог
         req.setAttribute("items", receiptService.getItemsByReceiptId(id));
         req.setAttribute("total", receiptService.calculateTotal(id));
 
+        // Переход на страницу деталей
         req.getRequestDispatcher("/WEB-INF/views/receipt-detail.jsp").forward(req, resp);
     }
+
 
     private void byClient(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
