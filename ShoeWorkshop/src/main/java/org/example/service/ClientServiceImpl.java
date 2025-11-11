@@ -12,6 +12,11 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 
     @Override
+    public List<Client> getAllSortedByName(boolean asc) {
+        return clientRepository.sortClients(asc);
+    }
+
+    @Override
     public Client findByEmail(String email) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");

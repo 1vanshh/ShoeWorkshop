@@ -156,3 +156,59 @@ h1,h2,h3{
 .push-right {
     margin-left: auto;
 }
+/* ——— Сортируемые заголовки таблиц ——— */
+.table th a.sort-link{
+    color: var(--accent-dark);          /* не синие */
+    text-decoration: none;              /* без подчёркивания */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    border-bottom: 1px dotted transparent;   /* лёгкий ховер */
+}
+.table th a.sort-link:hover{
+    border-bottom-color: var(--accent-dark);
+}
+
+/* Маркер направления сортировки */
+.sort-indicator{
+    font-size: 12px;
+    line-height: 1;
+    opacity: .45;                       /* дефолт «не активен» */
+    transform: translateY(1px);         /* чуть ниже, чтобы стоял ровно */
+}
+
+/* Когда сортировка активна — делаем маркер ярче */
+.sort-link.active .sort-indicator{
+    opacity: 1;
+}
+
+/* Небольшая «моноширинность» для маркера — так стрелки выглядят ровнее */
+.sort-indicator { font-family: ui-monospace, Menlo, Consolas, monospace; }
+/* Ссылка-заголовок сортировки в таблице клиентов */
+.table th a.sort-link,
+.table th a.sort-link:link,
+.table th a.sort-link:visited,
+.table th a.sort-link:hover,
+.table th a.sort-link:active {
+    color: inherit !important;        /* цвет как у текста заголовка */
+    text-decoration: none !important; /* убираем подчёркивание */
+}
+
+.sort-link {
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.sort-link .sort-indicator {
+    font-size: .9em;
+    opacity: .65;
+    transition: transform .15s ease, opacity .15s ease;
+}
+
+.sort-link:hover .sort-indicator {
+    opacity: 1;
+    transform: translateY(-1px);
+}

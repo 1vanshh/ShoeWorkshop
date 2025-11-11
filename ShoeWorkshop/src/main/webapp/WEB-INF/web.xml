@@ -7,12 +7,12 @@
 
     <display-name>ShoeWorkshop</display-name>
 
-    <!-- ✅ Главная страница -->
+    <!-- Главная страница -->
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
 
-    <!-- ✅ Фильтры безопасности -->
+    <!-- Фильтры безопасности -->
     <filter>
         <filter-name>SecurityHeadersFilter</filter-name>
         <filter-class>org.example.web.filter.SecurityHeadersFilter</filter-class>

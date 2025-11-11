@@ -16,18 +16,39 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final String SELECT_ALL_SQL = "SELECT * FROM clients ORDER BY client_id";
     private final String UPDATE_SQL = "UPDATE clients SET full_name = ?, phone = ?, email = ?, address = ? WHERE client_id = ?";
     private final String DELETE_SQL = "DELETE FROM clients WHERE client_id = ?";
-    private final String OFFSET_SEARCH_SQL = """
-        SELECT client_id, full_name, phone, email, address
-        FROM clients
-        WHERE full_name ILIKE ? 
-           OR phone ILIKE ? 
-           OR email ILIKE ?
-        ORDER BY client_id
-        LIMIT ? OFFSET ?
-    """;
+    private final String OFFSET_SEARCH_SQL =
+            """ 
+            SELECT client_id, full_name, phone, email, address
+            FROM clients
+            WHERE full_name ILIKE ?
+                OR phone ILIKE ?
+                OR email ILIKE ?
+            ORDER BY client_id
+            LIMIT ? OFFSET ?
+            """;
+    private final String SELECT_ALL_ORDER_BY_NAME_ASC = "SELECT client_id, full_name, phone, email, address FROM clients ORDER BY full_name ASC";
+    private final String SELECT_ALL_ORDER_BY_NAME_DESC = "SELECT client_id, full_name, phone, email, address FROM clients ORDER BY full_name DESC";
 
     public ClientRepositoryImpl() {
 
+    }
+
+    @Override
+    public List<Client> sortClients(boolean asc) {
+        List<Client> clients = new ArrayList<>();
+        String sql = asc ? SELECT_ALL_ORDER_BY_NAME_ASC : SELECT_ALL_ORDER_BY_NAME_DESC;
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                clients.add(mapClient(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error sorting clients", e);
+        }
+        return clients;
     }
 
     @Override

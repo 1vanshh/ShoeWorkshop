@@ -4,19 +4,16 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
-    <link rel="alternate icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
     <meta charset="UTF-8"/>
     <title>Клиенты</title>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/boot.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 
 <header class="header">
     <div class="container">
-        <!-- Логотип-кнопка на главную -->
         <a class="brand" href="${pageContext.request.contextPath}/home" title="На главную">ShoeWorkshop</a>
-
         <nav class="nav">
             <a href="${pageContext.request.contextPath}/home">Главная</a>
             <a href="${pageContext.request.contextPath}/clients">Клиенты</a>
@@ -38,6 +35,7 @@
             <div class="flash ok">${fn:escapeXml(info)}</div>
         </c:if>
 
+        <!-- Поиск -->
         <form class="row" method="get" action="${pageContext.request.contextPath}/clients">
             <input type="hidden" name="action" value="search">
             <input class="input" type="text" name="query" value="${fn:escapeXml(param.query)}"
@@ -48,10 +46,46 @@
 
         <hr class="hr"/>
 
+        <%-- Направление сортировки по ФИО --%>
+        <c:set var="currDir" value="${empty dir ? (empty param.dir ? 'asc' : param.dir) : dir}" />
+        <c:set var="nextDir" value="${currDir == 'desc' ? 'asc' : 'desc'}" />
+        <c:set var="isNameSort" value="${sort == 'name' || param.sort == 'name'}" />
+
+        <%-- Строим URL сортировки по ФИО. ВАЖНО: <c:url> сам добавляет contextPath --%>
+        <c:url var="sortByNameUrl" value="/clients">
+            <c:param name="sort" value="name"/>
+            <c:param name="dir"  value="${nextDir}"/>
+            <c:if test="${param.action == 'search'}">
+                <c:param name="action" value="search"/>
+                <c:if test="${not empty param.query}">
+                    <c:param name="query" value="${param.query}"/>
+                </c:if>
+            </c:if>
+        </c:url>
+
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th><th>ФИО</th><th>Телефон</th><th>Email</th><th>Адрес</th><th></th>
+                <!-- По умолчанию остаётся сортировка по ID -->
+                <th>ID</th>
+                <th>
+                    <!-- Ссылка сортировки по ФИО с маркером направления -->
+                    <a class="sort-link ${isNameSort ? 'active' : ''}" href="${sortByNameUrl}" style="color: inherit; text-decoration: none;">
+                        ФИО
+                        <span class="sort-indicator">
+              <c:choose>
+                  <c:when test="${isNameSort}">
+                      ${currDir == 'desc' ? '▼' : '▲'}
+                  </c:when>
+                  <c:otherwise>⇅</c:otherwise>
+              </c:choose>
+            </span>
+                    </a>
+                </th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th>Адрес</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>

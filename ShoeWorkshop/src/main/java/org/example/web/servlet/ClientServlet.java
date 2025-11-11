@@ -17,6 +17,7 @@ import java.util.List;
 public class ClientServlet extends HttpServlet {
 
     private final ClientService clientService = new ClientServiceImpl();
+    private static final String SORT_NAME = "name";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -63,11 +64,25 @@ public class ClientServlet extends HttpServlet {
         }
     }
 
-    // ----------- Методы ------------
-
     private void listAll(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        List<Client> clients = clientService.getAll();
+
+        String sort = req.getParameter("sort");   // "name" | null
+        String dir  = req.getParameter("dir");    // "asc" | "desc" | null
+        boolean asc = !"desc".equalsIgnoreCase(dir);
+
+        List<Client> clients;
+        if (SORT_NAME.equalsIgnoreCase(sort)) {
+            clients = clientService.getAllSortedByName(asc);
+            req.setAttribute("sort", "name");
+            req.setAttribute("dir", asc ? "asc" : "desc");
+        } else {
+            // дефолт: сортировка по ID — как у тебя и было в репозитории
+            clients = clientService.getAll();
+            req.setAttribute("sort", null);
+            req.setAttribute("dir", null);
+        }
+
         req.setAttribute("clients", clients);
         req.getRequestDispatcher("/WEB-INF/views/clients.jsp").forward(req, resp);
     }
