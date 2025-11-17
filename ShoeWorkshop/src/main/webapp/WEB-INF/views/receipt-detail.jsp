@@ -37,14 +37,15 @@
 
     <div class="row">
       <div><b>Клиент:</b>
-        <c:choose>
-          <c:when test="${not empty receiptClient}">
-            ${fn:escapeXml(receiptClient.fullName)}
-          </c:when>
-          <c:otherwise>ID ${receipt.clientId}</c:otherwise>
-        </c:choose>
+        <% if (request.getAttribute("receiptClient") != null) { %>
+          ${receiptClient.fullName}
+        <% } else { %>
+          ID ${receipt.clientId}
+        <% } %>
       </div>
-      <div style="margin-left:16px;"><b>Статус:</b> ${fn:escapeXml(currentStatusName)}</div>
+      <div style="margin-left:16px;"><b>Статус:</b>
+        ${fn:escapeXml(currentStatusName)}
+      </div>
       <div style="margin-left:16px;">
         <b>Дата:</b>
         <c:choose>

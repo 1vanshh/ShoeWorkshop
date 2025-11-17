@@ -9,7 +9,9 @@ import org.example.entities.Receipt;
 import org.example.service.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @WebServlet("/receipts")
@@ -80,7 +82,15 @@ public class ReceiptServlet extends HttpServlet {
             throws ServletException, IOException {
         ensureCsrf(req);
         List<Receipt> receipts = receiptService.getAll();
+
+        Map<Integer, String> statusMap = new HashMap<>();
+        List<OrderStatus> allStatuses = orderStatusService.getAll();
+        for (OrderStatus status : allStatuses) {
+            statusMap.put(status.getStatusId(), status.getStatusName());
+        }
+
         req.setAttribute("receipts", receipts);
+        req.setAttribute("statusMap", statusMap);
         req.getRequestDispatcher("/WEB-INF/views/receipts.jsp").forward(req, resp);
     }
 

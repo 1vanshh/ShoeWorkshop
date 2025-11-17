@@ -53,7 +53,13 @@
         <tr>
           <td>${r.receiptId}</td>
           <td>${r.clientId}</td>
-          <td>${r.statusId}</td>
+          <td>
+            <% if (request.getAttribute("statusMap") != null) { %>
+              ${statusMap[r.statusId]}
+            <% } else { %>
+            ID ${r.statusId}
+            <% } %>
+          </td>
           <td>
             <c:choose>
               <c:when test="${not empty r.orderDate}">
